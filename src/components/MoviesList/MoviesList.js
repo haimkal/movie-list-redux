@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getMoviesList } from '../../Redux/AsyncThunk'
 import { MovieService } from '../../services/movie.services'
@@ -8,14 +8,15 @@ import './MoviesList.css'
 
 
 export default function MoviesList() {
-
     const dispatch = useDispatch()
     const movies = useSelector(({ movies }) => movies)
-    const [page, setPage] = useState(1)
+    const currentPage = useSelector(({ page }) => page)
+    const [page, setPage] = useState(currentPage)
 
-    const getMovies = async (args) => {
-        dispatch(getMoviesList(args))
-    }
+    const getMovies = useCallback(async (page) => {
+        dispatch(getMoviesList(page))
+    }, [page])
+
     useEffect(() => {
         getMovies(page)
     }, [page])

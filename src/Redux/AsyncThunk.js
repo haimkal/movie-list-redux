@@ -13,9 +13,14 @@ const getMovies = async (page) => {
 export const getMoviesList = createAsyncThunk(
     ACTION_GET_MOVIES.type,
     async (page, { rejectWithValue }) => {
+
         try {
             let moviesResult = await getMovies(page)
-            return moviesResult
+            return ({
+                page: Number(moviesResult.page),
+                moviesList: moviesResult.results
+            })
+
         }
         catch (e) {
             return rejectWithValue(e.message)

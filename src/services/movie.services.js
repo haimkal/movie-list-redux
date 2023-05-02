@@ -20,8 +20,7 @@ export class MovieService {
             const response = await axios.request(options);
             console.log(response.data.results);
             if (response.data) {
-                console.log('im here')
-                return response.data.results
+                return response.data
             }
         } catch (error) {
             console.error(error)
