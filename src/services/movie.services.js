@@ -7,8 +7,6 @@ const headers = {
 
 export class MovieService {
 
-
-
     static async getMovies(page) {
         const options = {
             method: 'GET',

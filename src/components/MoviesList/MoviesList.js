@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getMoviesList } from '../../Redux/AsyncThunk'
 import { MovieService } from '../../services/movie.services'
 import MovieCard from '../MovieCard/MovieCard'
 import NextPrev from '../NextPrev/NextPrev'
 import './MoviesList.css'
+
+
 export default function MoviesList() {
-    const [movies, setMovies] = useState([])
+
+    const dispatch = useDispatch()
+    const movies = useSelector(({ movies }) => movies)
     const [page, setPage] = useState(1)
+
+    const getMovies = async (args) => {
+        dispatch(getMoviesList(args))
+    }
     useEffect(() => {
-
-        const getMovies = async () => {
-            const movies = await MovieService.getMovies(page)
-            return movies
-        }
-        getMovies().then(res => setMovies(res))
-
-
+        getMovies(page)
     }, [page])
 
     const turnToNextPage = () => { setPage(page + 1) }
@@ -22,13 +25,11 @@ export default function MoviesList() {
 
     console.log('moviesss: ', movies)
     return (
-        // movies &&
+        movies &&
         <>
             <ul className='movies-list'>
-                {movies.map(movie => (
-
+                {movies.map((movie) => (
                     <MovieCard name={movie.titleText.text} photo={movie.primaryImage?.url} id={movie.id} />
-
                 ))}
             </ul >
             <NextPrev turnToNextPage={turnToNextPage} turnToPrevPage={turnToPrevPage} page={page} />

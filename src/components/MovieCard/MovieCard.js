@@ -7,7 +7,7 @@ export default function MovieCard({ name, photo, id }) {
         <div className='movie-card'>
             <Link to={`/movie/${id}`}>
                 <li>{name}</li>
-                <img key={photo} className='card-img' src={photo || '/placeholder.png'} />
+                <img key={id} className='card-img' src={photo || '/placeholder.png'} />
             </Link >
         </div>
     )

@@ -1,31 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import { MovieService } from '../../services/movie.services'
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 export default function MoviePage() {
 
     const { id } = useParams()
-    console.log(id)
-    const [movieDetails, setMovieDetails] = useState()
+    const movies = useSelector(({ movies }) => movies)
+    const [currentMovie, setCurrentMovie] = useState()
 
     useEffect(() => {
-        const getMovieDetails = async () => {
-            const movie = MovieService.getMovie(id)
-            return movie
-
-        }
-
-        getMovieDetails().then((res) => setMovieDetails(res))
+        setCurrentMovie(movies.filter((movie) => movie.id === id)[0])
     }, [])
-    console.log(movieDetails)
+    console.log('current Movie: ', currentMovie)
+
+
     return (
-        movieDetails &&
+        currentMovie &&
         <div>
-            <h2>{movieDetails.titleText.text}</h2>
-            <img src={movieDetails.primaryImage?.url || '/placeholder.png'}
-                alt={movieDetails.titleText.text}
-                title={movieDetails.titleText.text} />
-            <span>Release Year: {movieDetails.releaseYear.year} </span>
+            <h2>{currentMovie.titleText.text}</h2>
+            <img src={currentMovie.primaryImage?.url || '/placeholder.png'}
+                alt={currentMovie.titleText.text}
+                title={currentMovie.titleText.text} />
+            <span>Release Year: {currentMovie.releaseYear.year} </span>
+            <Link to={"/"}>
+                <div>Get back to movies list</div>
+            </Link>
         </div>
+
+
     )
 }
